@@ -1,4 +1,5 @@
 import {asyncHandler} from '../utils/asyncHandler.js'
+import {ApiError} from '../utils/apiError.js'
 
 const registerUser = asyncHandler(async (req,res)=>{
     //get user details from frontend
@@ -10,9 +11,19 @@ const registerUser = asyncHandler(async (req,res)=>{
     //remove password and refresh token from response
     //check user creation
     //return res
-    res.status(200).json({
-        message:"ok"
-    })
+    // res.status(200).json({
+    //     message:"ok"
+    // })
+
+    const {fullName,email,username,password}=req.body;
+    console.log("email : ",email)
+
+
+    const isInvalid =  [fullName,email,username,password].some((field)=>
+        field?.trim()==="")
+    if(isInvalid){
+        throw new ApiError(400,'All fields are required')
+    }
 })
 
 export {registerUser};
